@@ -163,6 +163,8 @@ cython_debug/
 # Make file
 Makefile
 
-# city photos
+# Media
+media/item_images
 
+# city photos
 city/photos/
