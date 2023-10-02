@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "core",
     "item",
+    "dashboard",
 ]
 
 MIDDLEWARE = [
@@ -63,7 +64,12 @@ ROOT_URLCONF = "KoaDeals.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": ["templates", "core/templates"],
+        "DIRS": [
+            "templates",
+            "core/templates",
+            "item/templates",
+            "dashboard/templates",
+        ],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
