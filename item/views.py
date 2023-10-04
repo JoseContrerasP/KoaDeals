@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
-from .models import Item
+from .models import Item, Category
 from .forms import NewItemForm, EditItemForm
 
 
@@ -59,19 +60,24 @@ def edit_item(request, item_id):
     context = {"item": item, "form": form}
     return render(request, "item/edit.html", context)
 
-    # item = get_object_or_404(Item, pk=item_id, created_by=request.user)
 
-    # if request.method == "GET":
-    #     form = EditItemForm(instance=item)
+def items(request):
+    items = Item.objects.filter(sold=False)
+    query = request.GET.get("query", "")
+    categories = Category.objects.all()
+    category_id = request.GET.get("category", 0)
 
-    #     context = {"item": item, "form": form}
-    #     return render(request, "item/edit.html", context)
+    if category_id:
+        items = items.filter(category_id=category_id)
 
-    # else:
-    #     try:
-    #         form = EditItemForm(request.POST, request.FILES, instance=city)
-    #         form.save()
-    #         return redirect("core:contact")
+    if query:
+        items = items.filter(Q(name__icontains=query) | Q(description__icontains=query))
 
-    #     except ValueError:
-    #         return render(request, "item/edit.html", context)
+    context = {
+        "items": items,
+        "query": query,
+        "categories": categories,
+        "category_id": int(category_id),
+    }
+
+    return render(request, "item/items.html", context)
