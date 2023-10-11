@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "core",
     "item",
     "dashboard",
+    "communication",
 ]
 
 MIDDLEWARE = [
@@ -69,6 +70,7 @@ TEMPLATES = [
             "core/templates",
             "item/templates",
             "dashboard/templates",
+            "communication/templates",
         ],
         "APP_DIRS": True,
         "OPTIONS": {
