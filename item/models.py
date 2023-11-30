@@ -23,7 +23,7 @@ class Item(models.Model):
     price = models.FloatField()
     sold = models.BooleanField(default=False)
     # image = models.ImageField(upload_to="item_images", blank=True, null=True)
-    image = CloudinaryField("item_images", blank=True, null=True)
+    image = CloudinaryField("item_images")
     category = models.ForeignKey(
         Category, related_name="items", on_delete=models.CASCADE
     )
