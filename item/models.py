@@ -2,6 +2,7 @@ from django.db import models
 
 from django.db import models
 from django.contrib.auth.models import User
+from cloudinary.models import CloudinaryField
 
 
 class Category(models.Model):
@@ -21,7 +22,8 @@ class Item(models.Model):
     description = models.TextField(blank=True, null=True)
     price = models.FloatField()
     sold = models.BooleanField(default=False)
-    image = models.ImageField(upload_to="item_images", blank=True, null=True)
+    # image = models.ImageField(upload_to="item_images", blank=True, null=True)
+    image = CloudinaryField("item_images", blank=True, null=True)
     category = models.ForeignKey(
         Category, related_name="items", on_delete=models.CASCADE
     )
