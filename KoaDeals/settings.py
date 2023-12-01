@@ -5,9 +5,9 @@ import environ
 import dj_database_url
 
 # Cloudinary imports
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
+# import cloudinary
+# import cloudinary.uploader
+# import cloudinary.api
 
 env = environ.Env()
 environ.Env().read_env()
@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     "item",
     "dashboard",
     "communication",
-    "cloudinary",
+    # "cloudinary",
 ]
 
 MIDDLEWARE = [
@@ -151,8 +151,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Cloudinary - Django integration
 
-cloudinary.config(
-    cloud_name=os.environ.get("CLOUD_NAME"),
-    api_key=os.environ.get("API_KEY"),
-    api_secret=os.environ.get("API_SECRET"),
-)
+# cloudinary.config(
+#     cloud_name=os.environ.get("CLOUD_NAME"),
+#     api_key=os.environ.get("API_KEY"),
+#     api_secret=os.environ.get("API_SECRET"),
+# )

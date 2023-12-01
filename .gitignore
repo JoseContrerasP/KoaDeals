@@ -170,3 +170,5 @@ media/item_images
 city/photos/
 
 upgrades.txt
+
+KoaDeals/settings_local.py
