@@ -1,16 +1,12 @@
 from pathlib import Path
 
 import os
-import environ
 import dj_database_url
 
 # Cloudinary imports
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
-
-env = environ.Env()
-environ.Env().read_env()
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -82,7 +78,8 @@ WSGI_APPLICATION = "KoaDeals.wsgi.application"
 # Database
 DATABASES = {
     "default": dj_database_url.config(
-        default="postgresql://postgres:postgres@localhost:5432/mysite", conn_max_age=600
+        default="postgresql://postgres:postgres@localhost:5432/KoaDeals",
+        conn_max_age=600,
     )
 }
 
@@ -141,8 +138,8 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = "/media/"
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
+# MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = BASE_DIR / "media"
 
 # Default primary key field type
 
@@ -155,4 +152,5 @@ cloudinary.config(
     cloud_name=os.environ.get("CLOUD_NAME"),
     api_key=os.environ.get("API_KEY"),
     api_secret=os.environ.get("API_SECRET"),
+    secure=True,
 )
