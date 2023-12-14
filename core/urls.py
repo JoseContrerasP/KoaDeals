@@ -17,4 +17,5 @@ urlpatterns = [
         ),
         name="login",
     ),
+    path("signout/", views.signout, name="signout"),
 ]
