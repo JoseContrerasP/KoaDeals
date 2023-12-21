@@ -22,7 +22,7 @@ if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
-SITE_ID = os.environ.get("SITE_ID")
+SITE_ID = int(os.environ.get("SITE_ID"))
 
 
 # Application definition
