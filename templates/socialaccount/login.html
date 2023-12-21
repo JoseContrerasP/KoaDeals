@@ -1,0 +1,41 @@
+{% extends "socialaccount/base_entrance.html" %}
+{% load i18n %}
+{% load allauth %}
+{% block title %}Sign up - {{ provider.name }}{% endblock title %}
+{% block head_title %}
+    {% trans "Sign In" %}
+{% endblock head_title %}
+{% block content %}
+    <div class="w-1/2 my-6 p-6 mx-auto bg-gray-100 rounded-xl">
+    {% if process == "connect" %}
+        {% element h1 %}
+            {% blocktrans with provider.name as provider %}Connect {{ provider }}{% endblocktrans %}
+        {% endelement %}
+        <p>
+            {% blocktrans with provider.name as provider %}You are about to connect a new third-party account from {{ provider }}.{% endblocktrans %}
+        </p>
+    {% else %}
+
+        <!-- Title -->
+        <h2 class="mb-12 text-2xl">
+            {% blocktrans with provider.name as provider %}Sign In Via {{ provider }}{% endblocktrans %}
+        </h2>  
+
+        <!-- Paragraph -->
+        <p class="text-gray-700">
+            {% blocktrans with provider.name as provider %}You are about to sign in using a third-party account from <strong>{{ provider }}</strong>.{% endblocktrans %}
+        </p>
+    {% endif %}
+    {% element form method="post" no_visible_fields=True %}
+        {% slot actions %}
+            {% csrf_token %}
+
+            <br>
+            <!-- Button -->
+            <button class="py-2 px-8 text-lg bg-gray-500 hover:bg-gray-700 rounded-xl text-white" type="submit">
+                {% trans "Continue" %}
+            </button>
+        {% endslot %}
+    {% endelement %}
+    </div>
+{% endblock content %}

@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 
 from item.models import Category, Item
-from .forms import SignupForm
+from .forms import MySignupForm
 
 from django.contrib.auth import logout
 
 
 def index(request):
-    items = Item.objects.filter(sold=False)
+    items = Item.objects.filter(sold=False).reverse()
     categories = Category.objects.all()
     context = {"items": items, "categories": categories}
 
@@ -20,7 +20,7 @@ def contact(request):
 
 def signup(request):
     if request.method == "POST":
-        form = SignupForm(request.POST)
+        form = MySignupForm(request.POST)
 
         if form.is_valid():
             form.save()
@@ -28,9 +28,9 @@ def signup(request):
             return redirect("core:login")
 
     else:
-        form = SignupForm()
+        form = MySignupForm()
 
-    context = {"form": SignupForm}
+    context = {"form": MySignupForm}
 
     return render(request, "core/signup.html", context)
 
