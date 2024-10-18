@@ -24,8 +24,10 @@ def signup(request):
 
         if form.is_valid():
             form.save()
-
+            print("Before you go")
             return redirect("core:login")
+        else:
+            pass
 
     else:
         form = MySignupForm()

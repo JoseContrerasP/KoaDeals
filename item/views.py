@@ -5,14 +5,77 @@ from django.db.models import Q
 from .models import Item, Category
 from .forms import NewItemForm, EditItemForm
 
+from django.http import JsonResponse
+
+from cart.models import Pedido
+
+import requests
+
 
 def detail(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
     releted_items = Item.objects.filter(category=item.category, sold=False).exclude(
         pk=item_id
     )[0:3]
-    context = {"item": item, "releted_items": releted_items}
-    return render(request, "item/detail.html", context)
+
+    # data = {
+    #   "product": {
+    #         "id": item.id,
+    #         "name": item.name,
+    #         "description": item.description,
+    #         "price": item.price,
+    #         "sold": str(item.sold),
+    #         "image": item.image.url,
+    #         "category": item.category.id,
+    #         "created_by": item.created_by.id
+    #     },
+    #   "quantity": 1
+    # }
+
+    # if request.POST.get("action") == "post":
+        # # response = JsonResponse(item_dict_add)
+
+        # return response 
+        
+        # redirect("core:index")
+
+    if request.method == "POST":
+        try:
+            exclusive = get_object_or_404(Pedido, item=item, owner=request.user)
+            endpoint_pedido = f"http://127.0.0.1:8000/pedido/{exclusive.id}/"
+            delete_request_pedido = requests.delete(endpoint_pedido)
+
+        except: # I gotta check what exception arise to make it more precise
+            endpoint_pedido = "http://127.0.0.1:8000/pedido/"
+            endpoint_cart = "http://127.0.0.1:8000/cart/"
+
+            pedido = {
+                "item": item.id,
+                "owner": request.user.id,
+                "quantity": 4,
+            }
+
+            post_request_pedido = requests.post(endpoint_pedido, json=pedido)
+            exclusive = Pedido.objects.get(item=item, owner=request.user)
+
+            cart = {
+                "pedido": exclusive.id 
+            }
+
+            post_request = requests.post(endpoint_cart, json=cart)
+       
+        return redirect("item:detail", item_id=item_id)
+
+
+    else:
+        try:
+            exclusive = get_object_or_404(Pedido, item=item, owner=request.user)
+            show = False
+        except:
+            show = True
+
+        context = {"item": item, "releted_items": releted_items, "show": show}
+        return render(request, "item/detail.html", context)
 
 
 @login_required

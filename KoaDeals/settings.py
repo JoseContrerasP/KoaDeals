@@ -22,7 +22,7 @@ if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
-SITE_ID = int(os.environ.get("SITE_ID"))
+SITE_ID = int(os.environ.get("SITE_ID", default="1"))
 
 
 # Application definition
@@ -33,10 +33,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    #apps
     "core",
     "item",
     "dashboard",
     "communication",
+    "cart",
     # cloudinary
     "cloudinary",
     # allauth
@@ -46,6 +48,8 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.github",
     "allauth.socialaccount.providers.google",
+    # drf
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -191,3 +195,7 @@ SOCIALACCOUNT_PROVIDERS = {
         },
     },
 }
+
+# cart
+
+CART_SESSION_ID = "cart"

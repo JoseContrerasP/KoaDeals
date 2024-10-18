@@ -33,3 +33,38 @@
 #google {
   border: 1px solid #bf1d25;
 }
+
+/* Cart */
+
+.box-shadow-custom {
+  box-shadow: -6px 6px 0 0 #6b7280;
+}
+
+.inline-block:hover .delete-button-custom,
+.inline-block .delete-button-custom2 {
+  display: none;
+}
+
+.inline-block:hover .delete-button-custom2 {
+  display: inline;
+}
+
+.delete-button-custom, .delete-button-custom2 {
+  color: red;
+}
+
+/* CARD */
+
+.card-custom .card-custom-image {
+  overflow: hidden;
+}
+
+.card-custom .card-custom-image img {
+  transition: all 0.4s ease;
+}
+
+.card-custom:hover .card-custom-image img {
+  transform: scale(1.1);
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+}

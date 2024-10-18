@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}Cart{% endblock title %}
+
+{% block content %}
+
+<!-- <section class="mt-6 px-6 py-12 bg-gray-100 rounded-xl"> -->
+<h3 class="text-lg font-semibold">Cart</h3>
+<div class="container mt-3 p-4 rounded-xl bg-gray-50 box-shadow-custom">
+	<div class="row pb-2">
+		<div class="col text-lg font-semibold">Product</div>
+		<div class="col text-lg font-semibold">Price</div>
+		<div class="col text-lg font-semibold">Quantity</div>
+		<div class="col text-lg font-semibold">Total</div>
+	</div>
+	<hr>
+	{% for pedido in pedidos %}
+		<div class="row pt-2">
+			<div class="col-3"><a href="{% url 'item:detail' pedido.item.id %}" target="_blank">{{ pedido.item.name }}</a></div>
+			<div class="col-3">${{ pedido.item.price }}</div>
+			<div class="col-3">
+				<form action="" method="POST" class="rounded-pill">
+					{% csrf_token %}
+					<button name="add" value="{{ pedido.id }}" type="submit" class="inline-block pr-3"><i class="bi bi-plus-lg"></i></button>
+
+					<p class="inline-block">{{ pedido.quantity }}</p>
+
+					{% if pedido.quantity %}
+						<button name="subtract" value="{{ pedido.id }}" type="submit" class="inline-block pl-3"><i class="bi bi-dash-lg"></i></button>
+					{% endif %}
+
+				</form>				
+			</div>
+			<div class="col-2">${{ pedido.get_total_pedido }}</div>	
+			<div class="col">
+				<form action="" method="POST">
+					{% csrf_token %}
+					<div id="digo">
+						<button name="delete" value="{{ pedido.id }}" type="commit" class="inline-block">
+							<i class="bi bi-x-circle delete-button-custom"></i>
+							<i class="bi bi-x-circle-fill delete-button-custom2"></i>
+						</button>
+					</div>
+				</form>	
+			</div>
+		</div>	
+	{% empty %}
+		<div class="row pt-2">
+			<div class="col text-lg font-semibold">-</div>
+			<div class="col text-lg font-semibold">-</div>
+			<div class="col text-lg font-semibold">-</div>
+			<div class="col text-lg font-semibold">-</div>
+		</div>
+	{% endfor %}
+
+</div>
+<br>
+<div class="container mt-3 p-4 rounded-xl bg-gray-50 box-shadow-custom">
+	<h4 class="text-lg font-semibold pb-2">Summary</h4>
+	<hr>
+
+	<div class="row pt-2">
+		<p>${{ total }} - {{ quantities }} items</p>
+	</div>
+	<form action="" method="">
+		{% csrf_token %}
+		<button value="" type="commit" class="inline-block px-6 mt-6 py-3 text-lg font-semibold bg-cyan-500 text-white rounded-xl hover:bg-cyan-700">Proceed to the checkout</button>
+	</form>
+</div>
+</section>
+	
+{% endblock content %}
+<!-- 
+	{% for pedido in pedidos %}
+		{{ pedido.pedido.get_total_pedido }}
+	{% endfor %}
+	<br>
+	<p>total: </p>{{ total }}
+	<br>
+	<p>get total: </p>{{ pedidos.get_total }} -->
