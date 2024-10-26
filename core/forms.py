@@ -10,7 +10,7 @@ class LoginForm(AuthenticationForm):
         widget=forms.TextInput(
             attrs={
                 "placeholder": "Your username",
-                "class": "w-full py-4 px-6 rounded-xl",
+                "class": "tw-w-full tw-py-4 tw-px-6 tw-rounded-xl",
             }
         )
     )
@@ -19,7 +19,7 @@ class LoginForm(AuthenticationForm):
         widget=forms.PasswordInput(
             attrs={
                 "placeholder": "Your password",
-                "class": "w-full py-4 px-6 rounded-xl",
+                "class": "tw-w-full tw-py-4 tw-px-6 tw-rounded-xl",
             }
         )
     )
@@ -77,7 +77,7 @@ class MySignupForm(UserCreationForm):
         widget=forms.TextInput(
             attrs={
                 "placeholder": "Your username",
-                "class": "w-full py-4 px-6 rounded-xl",
+                "class": "tw-w-full tw-py-4 tw-px-6 tw-rounded-xl",
             }
         )
     )
@@ -86,7 +86,7 @@ class MySignupForm(UserCreationForm):
         widget=forms.EmailInput(
             attrs={
                 "placeholder": "Your email address",
-                "class": "w-full py-4 px-6 rounded-xl",
+                "class": "tw-w-full tw-py-4 tw-px-6 tw-rounded-xl",
             }
         )
     )
@@ -95,7 +95,7 @@ class MySignupForm(UserCreationForm):
         widget=forms.PasswordInput(
             attrs={
                 "placeholder": "Your password",
-                "class": "w-full py-4 px-6 rounded-xl",
+                "class": "tw-w-full tw-py-4 tw-px-6 tw-rounded-xl",
             }
         )
     )
@@ -104,7 +104,7 @@ class MySignupForm(UserCreationForm):
         widget=forms.PasswordInput(
             attrs={
                 "placeholder": "Repeat password",
-                "class": "w-full py-4 px-6 rounded-xl",
+                "class": "tw-w-full tw-py-4 tw-px-6 tw-rounded-xl",
             }
         )
     )

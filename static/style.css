@@ -26,6 +26,29 @@
     position: relative;
 }
 
+img {
+  max-width: 100%;
+  height: auto; 
+}
+
+a {
+  text-decoration: none;
+  color: #050505 !important;
+}
+
+a:hover {
+  text-decoration: none;
+  color: rgb(107 114 128 / 1) !important;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+.text-white:hover {
+  color: white !important;
+}
+
 #github {
   border: 1px solid #000;
 }
@@ -34,23 +57,66 @@
   border: 1px solid #bf1d25;
 }
 
+button {
+  border: unset;
+  background-color: inherit;
+}
+
+/* Full Screen */
+
+.full-screen {
+  min-height: 80vh;
+}
+
+/* NavBar */
+
+.border-gray-200 {
+  border-color: rgb(229 231 235 / 1);
+}
+
+.border-b {
+  border-bottom-width: 1px;
+}
+
+/* Footer */
+
+.footer-link {
+  color: rgb(20 184 166 / 1) !important;  
+}
+
+.footer-link:hover {
+  color: rgb(15 118 110 / 1) !important;  
+}
+
+/* Item */
+
+.detail-image {
+  max-height: 85vh;
+}
+
 /* Cart */
 
 .box-shadow-custom {
   box-shadow: -6px 6px 0 0 #6b7280;
 }
 
-.inline-block:hover .delete-button-custom,
-.inline-block .delete-button-custom2 {
+.tw-inline-block:hover .delete-button-custom,
+.tw-inline-block .delete-button-custom2 {
   display: none;
 }
 
-.inline-block:hover .delete-button-custom2 {
+.tw-inline-block:hover .delete-button-custom2 {
   display: inline;
 }
 
 .delete-button-custom, .delete-button-custom2 {
   color: red;
+}
+
+/* Inbox */
+
+.inbox-image {
+  max-width: 25vw;
 }
 
 /* CARD */
@@ -61,6 +127,8 @@
 
 .card-custom .card-custom-image img {
   transition: all 0.4s ease;
+  max-width: 100%;
+  height: auto;
 }
 
 .card-custom:hover .card-custom-image img {
@@ -68,3 +136,12 @@
   border-top-left-radius: 0.75rem;
   border-top-right-radius: 0.75rem;
 }
+
+/* block-content */
+
+.block-content {
+  margin-top: 4rem !important;
+}
+
+/* form */
+

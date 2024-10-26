@@ -24,7 +24,7 @@ class CartAPIView(generics.CreateAPIView):
             quantities += pedido.quantity
 
         context = {"pedidos": pedidos, "total": total, "quantities": quantities}
-        return render(request, "cart/index.html", context)
+        return render(request, "cart/cart.html", context)
 
     def post(self, request, *args, **kwargs):
         endpoint = "http://127.0.0.1:8000/pedido/"

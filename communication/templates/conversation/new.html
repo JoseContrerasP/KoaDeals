@@ -3,18 +3,18 @@
 {% block title %}New conversation{% endblock title %}
 
 {% block content %}
-<h1 class="mb-6 text-3xl">New Conversation</h1>
+<h1 class="tw-mb-6 tw-text-3xl">New Conversation</h1>
 
 <form method="POST">
 	{% csrf_token %}
 
-	<div class="space-y-4">
+	<div class="tw-space-y-4">
 		{{ form.as_p }}
 	</div>
 
 	{% if form.errors or form.non_field_errors %}
 
-		<div class="mb-3 p-6 bg-red-100 rounded-xl">
+		<div class="tw-mb-3 tw-p-6 tw-bg-red-100 tw-rounded-xl">
 			{% for field in form %}
 				{{ field.errors }}
 			{% endfor %}
@@ -22,6 +22,6 @@
 		</div>
 	{% endif %}
 
-	<button class="mt-6 py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Send</button>
+	<button class="tw-mt-6 tw-py-4 tw-px-8 tw-text-lg tw-bg-teal-500 hover:tw-bg-teal-700 tw-rounded-xl text-white">Send</button>
 </form>
 {% endblock content %}

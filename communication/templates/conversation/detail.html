@@ -3,13 +3,13 @@
 {% block title %}Conversation{% endblock title %}
 
 {% block content %}
-<h1 class="mb-6 text-3xl">Conversation</h1>
+<h1 class="tw-mb-6 tw-text-3xl">Conversation</h1>
 
-<div class="space-y-6">
+<div class="tw-space-y-6">
 	{% for message in conversation.messages.all %}
-			<div class="p-6 flex {% if message.created_by == request.user %}bg-blue-100{% else %}bg-gray-100{% endif %} rounded-xl">
+			<div class="tw-p-6 d-flex {% if message.created_by == request.user %}tw-bg-blue-100 justify-content-end{% else %}tw-bg-gray-100{% endif %} tw-rounded-xl">
 				<div>
-					<p class="mb-4"><strong>{{ message.created_by.username }}</strong> @ {{ message.created_at }}</p>
+					<p class="tw-mb-4 {% if message.created_by == request.user %}text-end{% endif %}"><strong>{{ message.created_by.username }}</strong> @ {{ message.created_at }}</p>
 					<p>{{ message.content }}</p>
 				</div>
 				
@@ -18,13 +18,13 @@
 </div>
 
 	<!-- <form action="." method="POST" class="mt-6"> -->
-<div class="h-50">
+<div>
 	<form action="." method="POST">
-	{% csrf_token %}
+		{% csrf_token %}
 
-	{{ form.as_p }}
+		{{ form.as_p }}
 
-	<button class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Send</button>
+		<button class="tw-py-4 tw-px-8 tw-text-lg tw-bg-teal-500 hover:tw-bg-teal-700 tw-rounded-xl text-white">Send</button>
 	
 	</form>
 </div>

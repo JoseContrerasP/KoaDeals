@@ -3,63 +3,65 @@
 {% block title %}Items{% endblock title %}
 
 {% block content %}
-<div class="pb-6 grid grid-cols-4 gap-4 bg-gray-100">
-	<div class="col-span-1">
-		<form action="{% url 'item:items' %}" method="GET">
-			<input type="text" class="w-full py-4 px-6 bounded-xl" name="query" value="{{ query }}" placeholder="Find a bike, a chair or a car...">
+<div class="tw-pb-6 container-flex tw-space-x-2">
+	<div class="row justify-content-center">
+		<div class="col-12 col-md-3 px-3 mx-3 tw-py-6 mb-3 tw-bg-gray-100 tw-rounded-xl">
+			<form action="{% url 'item:items' %}" method="GET">
+				<input type="text" class="tw-w-full tw-py-4 tw-px-6 tw-rounded-xl" name="query" value="{{ query }}" placeholder="Find a bike, a chair or a car...">
 
-			<button class="mt-2 py-4 px-8 text-lg bg-teal-500 text-white rounded-xl">Search</button>
-		</form>
+				<button class="tw-mt-2 tw-py-4 tw-px-8 tw-text-lg tw-bg-teal-500 text-white tw-rounded-xl hover:tw-bg-teal-700">Search</button>
+			</form>
 
-		<hr class="my-6">
+			<hr class="tw-my-6">
 
-		<!-- <p class="font-semibolt">Categories</p> -->
-		<p class="text-xl font-semibold px-3">Categories</p>
+			<div class="accordion accordion-flush" id="accordionFlushExample">
+			  <div class="accordion-item tw-rounded-xl">
+			    <h2 class="accordion-header" id="flush-headingOne">
+			      <button class="accordion-button collapsed tw-text-xl tw-font-semibold tw-rounded-xl" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+			        Categories
+			      </button>
+			    </h2>
+			    <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+			      <div class="accordion-body">			      	
+					{% for category in categories %}
+						<a href="{% url 'item:items' %}?query={{ query }}&category={{ category.id }}" class="d-block">{{ category.name }}</a>
+					{% endfor %}
+			      </div>
+			    </div>
+			  </div>
+			</div>
 
-		<ul class="px-5">
-			{% for category in categories %}
-				<li class="py-2 px-2 rounded-xl{% if category.id == category_id %} bg-gray-200{% endif %}">
-					<a href="{% url 'item:items' %}?query={{ query }}&category={{ category.id }}">{{ category.name }}</a>
-				</li>
-			{% endfor %}
-		</ul>
+			<hr class="tw-my-6">
 
-		<hr class="my-6">
+			<p class="tw-text-xl tw-font-semibold px-3">Clear filters</p>
+			
+			<a href="{% url 'item:items' %}" class="tw-mt-2 tw-py-4 tw-px-8 tw-inline-block tw-bg-yellow-500 tw-text-lg tw-rounded-xl text-white hover:tw-bg-yellow-600">Clear</a>
+		</div>
 
-		<p class="text-xl font-semibold px-3">Clear filters</p>
+		<div class="col-12 col-md-8  tw-bg-gray-100 tw-rounded-xl mb-3">
+		    <div class="container tw-mt-6 tw-px-6 tw-py-12 tw-bg-gray-100 tw-rounded-xl">
+	        <h2 class="tw-mb-12 tw-text-2xl tw-text-center">{{ title }}</h2>
+		        <div class="row" data-masonry='{"percentPosition": true }'>
+		            {% for item in items %}
+		                <div class="col-12 col-md-6 col-lg-4 mb-4">
+		                    <div class="card-custom tw-rounded-t-xl">
+		                        <a href="{% url 'item:detail' item_id=item.id %}">
+		                            <div class="card-custom-image tw-rounded-t-xl">
+		                                <img src="{{ item.image.url }}" class="tw-rounded-t-xl">
+		                            </div>
 
-		<ul>
-			<li>
-				<a href="{% url 'item:items' %}" class="mt-2 py-4 px-8 inline-block bg-yellow-500 text-lg rounded-xl text-white">Clear</a>
-			</li>
-		</ul>
-
-
-	</div>
-
-	<div class="col-span-3">
-		<div class="grid grid-cols-3 gap-3">
-	        {% for item in items %}
-                <div class="card-custom rounded-t-xl">
-                    <a href="{% url 'item:detail' item_id=item.id %}">
-                        <div class="card-custom-image rounded-t-xl">
-                            <img src="{{ item.image.url }}" class="rounded-t-xl">
-                        </div>
-
-                        <div class="p-6 bg-white rounded-b-xl">
-                            <h2 class="text-2xl">{{ item.name }}</h2>
-                            <p class="text-gray-500">Price: {{ item.price }}</p>
-<!--                             <div>
-                                <a href="{% url 'item:new' %}" class="text-gray-500 hover:text-black-500">Seller: {{item.created_by}}</a>
-                                
-                            </div>
- -->
-                      </div>
-                    </a>
-                </div>
-            {% endfor %}
-	    </div>
-		
+		                            <div class="tw-p-6 tw-bg-white tw-rounded-b-xl">
+		                                <h2 class="tw-text-2xl">{{ item.name }}</h2>
+		                                <p class="tw-text-gray-500">Price: {{ item.price }}</p>
+		                            </div>
+		                        </a>
+		                    </div>
+		                </div>
+		            {% endfor %}
+		        </div>
+		    </div>
+			
+		</div>
 	</div>
 </div>
 {% endblock content %}

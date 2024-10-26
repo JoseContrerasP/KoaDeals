@@ -19,8 +19,8 @@ from item.models import Item
 #         return str(self.name)
 
 class Pedido(models.Model):
-	item = models.ForeignKey(Item, on_delete=models.CASCADE)
-	owner = models.ForeignKey(User, related_name="pedidos", on_delete=models.CASCADE)
+	item = models.ForeignKey(Item, on_delete=models.CASCADE, blank=True, null=True)
+	owner = models.ForeignKey(User, related_name="pedidos", on_delete=models.CASCADE, blank=True, null=True)
 
 	quantity = models.PositiveSmallIntegerField()
 
@@ -36,7 +36,7 @@ class Pedido(models.Model):
 		return f"{self.item.name} - {self.quantity}"
 
 class Cart(models.Model):
-	pedido = models.ForeignKey(Pedido, related_name="carts", on_delete=models.CASCADE)
+	pedido = models.ForeignKey(Pedido, related_name="carts", on_delete=models.CASCADE, blank=True, null=True)
 
 	modified_at = models.DateTimeField(auto_now=True)
 	created_at = models.DateTimeField(auto_now_add=True)

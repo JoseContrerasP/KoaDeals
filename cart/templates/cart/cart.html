@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Cart{% endblock title %}
+
+{% block content %}
+
+<section class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+<h3 class="tw-tw-text-lg tw-tw-font-semibold">Cart</h3>
+<div class="container p-4 tw-rounded-xl tw-bg-gray-50 box-shadow-custom">
+	<div class="row pb-2">
+		<div class="col-3 tw-text-lg tw-font-semibold">Product</div>
+		<div class="col-3 tw-text-lg tw-font-semibold">Price</div>
+		<div class="col-3 tw-text-lg tw-font-semibold">Quantity</div>
+		<div class="col-3 tw-text-lg tw-font-semibold">Total</div>
+	</div>
+	<hr>
+	{% for pedido in pedidos %}
+		<div class="row pt-1">
+			<div class="col-3"><a href="{% url 'item:detail' pedido.item.id %}" target="_blank">{{ pedido.item.name }}</a></div>
+			<div class="col-3">${{ pedido.item.price }}</div>
+			<div class="col-3">
+				<form action="" method="POST" class="rounded-pill">
+					{% csrf_token %}
+					<button name="add" value="{{ pedido.id }}" type="submit" class="tw-inline-block tw-pr-3"><i class="bi bi-plus-lg"></i></button>
+
+					<p class="tw-inline-block">{{ pedido.quantity }}</p>
+
+					{% if pedido.quantity %}
+						<button name="subtract" value="{{ pedido.id }}" type="submit" class="tw-inline-block tw-pl-3"><i class="bi bi-dash-lg"></i></button>
+					{% endif %}
+
+				</form>				
+			</div>
+			<div class="col-2">${{ pedido.get_total_pedido }}</div>	
+			<div class="col">
+				<form action="" method="POST">
+					{% csrf_token %}
+					<div id="digo">
+						<button name="delete" value="{{ pedido.id }}" type="commit" class="tw-inline-block">
+							<i class="bi bi-x-circle delete-button-custom"></i>
+							<i class="bi bi-x-circle-fill delete-button-custom2"></i>
+						</button>
+					</div>
+				</form>	
+			</div>
+		</div>	
+	{% empty %}
+		<div class="row pt-2">
+			<div class="col tw-text-lg tw-font-semibold">-</div>
+			<div class="col tw-text-lg tw-font-semibold">-</div>
+			<div class="col tw-text-lg tw-font-semibold">-</div>
+			<div class="col tw-text-lg tw-font-semibold">-</div>
+		</div>
+	{% endfor %}
+
+</div>
+<br>
+<div class="container p-4 tw-rounded-xl tw-bg-gray-50 box-shadow-custom">
+	<h4 class="tw-text-lg tw-font-semibold pb-2">Summary</h4>
+	<hr>
+
+	<div class="row pt-1">
+		<p>${{ total }} - {{ quantities }} items</p>
+	</div>
+	<form action="" method="">
+		{% csrf_token %}
+		<button value="" type="commit" class="tw-inline-block tw-px-6 py-3 tw-text-lg tw-font-semibold tw-bg-cyan-500 text-white tw-rounded-xl hover:tw-bg-cyan-700">Proceed to the checkout</button>
+	</form>
+</div>
+</section>
+	
+{% endblock content %}

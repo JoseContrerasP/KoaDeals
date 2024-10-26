@@ -5,45 +5,55 @@
 {% block title %}Sign up{% endblock title %}
 
 {% block content %}
-<div class="w-1/2 my-6 p-6 mx-auto bg-gray-100 rounded-xl">
-	<h1 class="mb-6 text-3xl">Sign Up</h1>
+<div class="tw-my-6 tw-p-6 tw-mx-auto tw-bg-gray-100 tw-rounded-xl col-md-4">
+	<h1 class="tw-mb-6 tw-text-3xl">Sign Up</h1>
 
-	<div class="mb-3 space-x-4">
+<!-- 	<div class="tw-mb-3 row justify-content-center align-items-center">
 
-		<!-- process='connect' -->
-		<a href="{% provider_login_url 'github' %}?next=/" class="px-4 py-3 text-lg font-semibold rounded-xl bg-white hover:bg-gray-300" id="github"><i class="fa fa-github" style="font-size:24px"></i> GitHub</a>
-	
-		<a href="{% provider_login_url 'google' %}?next=/" class="px-4 py-3 text-lg font-semibold rounded-xl bg-white hover:bg-red-200" id="google"><i class="fa fa-google" style="font-size:24px;color:red"></i> Google</a>
+		<div class="col-6 col-lg-3">
+			<a href="{% provider_login_url 'github' %}?next=/" class="tw-px-4 tw-py-3 tw-text-lg tw-font-semibold tw-rounded-xl tw-bg-white hover:tw-bg-gray-300" id="github"><i class="fa fa-github" style="font-size:1.5rem"></i> GitHub</a>
+		</div>
+		
+		<div class="col-6 col-lg-3">
+			<a href="{% provider_login_url 'google' %}?next=/" class="tw-px-4 tw-py-3 tw-text-lg tw-font-semibold tw-rounded-xl tw-bg-white hover:tw-bg-red-200" id="google"><i class="fa fa-google" style="font-size:1.5rem;color:red"></i> Google</a>
+		</div>
+		<div class="col-6 col-lg-3">
+			<a href="{% provider_login_url 'github' %}?next=/" class="tw-px-4 tw-py-3 tw-text-lg tw-font-semibold tw-rounded-xl tw-bg-white hover:tw-bg-gray-300" id="github"><i class="fa fa-github" style="font-size:1.5rem"></i> GitHub</a>
+		</div>
+		
+		<div class="col-6 col-lg-3">
+			<a href="{% provider_login_url 'google' %}?next=/" class="tw-px-4 tw-py-3 tw-text-lg tw-font-semibold tw-rounded-xl tw-bg-white hover:tw-bg-red-200" id="google"><i class="fa fa-google" style="font-size:1.5rem;color:red"></i> Google</a>
+		</div>
 	</div>
 
 	<hr class="hr-text gradient" data-content="OR">
-
+ -->
 	<form action="." method="POST">
 		{% csrf_token %}
 
-		<div class="mb-3">
-			<label for="" class="inline-block mb-2">
+		<div class="tw-mb-3">
+			<label for="" class="inline-block tw-mb-2">
 				Username
 			</label><br>
 			{{ form.username }}
 		</div>
 
-		<div class="mb-3">
-			<label for="" class="inline-block mb-2">
+		<div class="tw-mb-3">
+			<label for="" class="inline-block tw-mb-2">
 				Email
 			</label><br>
 			{{ form.email }}
 		</div>
 
-		<div class="mb-3">
-			<label for="" class="inline-block mb-2">
+		<div class="tw-mb-3">
+			<label for="" class="inline-block tw-mb-2">
 				Password
 			</label><br>
 			{{ form.password1 }}
 		</div>
 
-		<div class="mb-3">
-			<label for="" class="inline-block mb-2">
+		<div class="tw-mb-3">
+			<label for="" class="inline-block tw-mb-2">
 				Repeat password
 			</label><br>
 			{{ form.password2 }}
@@ -51,7 +61,7 @@
 		
 		{% if form.errors or form.non_field_errors %}
 
-			<div class="mb-3 p-6 bg-red-100 rounded-xl">
+			<div class="tw-mb-3 tw-p-6 tw-bg-red-100 tw-rounded-xl">
 				{% for field in form %}
 					{{ field.errors }}
 				{% endfor %}
@@ -59,7 +69,7 @@
 			</div>
 		{% endif %}
 
-		<button class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Submit</button>
+		<button class="tw-py-4 tw-px-8 tw-text-lg tw-bg-teal-500 hover:tw-bg-teal-700 tw-rounded-xl tw-text-white">Submit</button>
 	</form>
 </div>
 {% endblock content %}

@@ -11,6 +11,8 @@ from cart.models import Pedido
 
 import requests
 
+import cart as cart_
+
 
 def detail(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
@@ -18,34 +20,13 @@ def detail(request, item_id):
         pk=item_id
     )[0:3]
 
-    # data = {
-    #   "product": {
-    #         "id": item.id,
-    #         "name": item.name,
-    #         "description": item.description,
-    #         "price": item.price,
-    #         "sold": str(item.sold),
-    #         "image": item.image.url,
-    #         "category": item.category.id,
-    #         "created_by": item.created_by.id
-    #     },
-    #   "quantity": 1
-    # }
-
-    # if request.POST.get("action") == "post":
-        # # response = JsonResponse(item_dict_add)
-
-        # return response 
-        
-        # redirect("core:index")
-
     if request.method == "POST":
         try:
-            exclusive = get_object_or_404(Pedido, item=item, owner=request.user)
+            exclusive = Pedido.objects.get(item=item, owner=request.user)
             endpoint_pedido = f"http://127.0.0.1:8000/pedido/{exclusive.id}/"
             delete_request_pedido = requests.delete(endpoint_pedido)
 
-        except: # I gotta check what exception arise to make it more precise
+        except cart_.models.Pedido.DoesNotExist:
             endpoint_pedido = "http://127.0.0.1:8000/pedido/"
             endpoint_cart = "http://127.0.0.1:8000/cart/"
 
@@ -69,9 +50,11 @@ def detail(request, item_id):
 
     else:
         try:
-            exclusive = get_object_or_404(Pedido, item=item, owner=request.user)
+            exclusive = Pedido.objects.get(item=item, owner=request.user)
             show = False
-        except:
+
+        # cart.models.Pedido.DoesNotExist
+        except cart_.models.Pedido.DoesNotExist:
             show = True
 
         context = {"item": item, "releted_items": releted_items, "show": show}
@@ -129,18 +112,34 @@ def items(request):
     query = request.GET.get("query", "")
     categories = Category.objects.all()
     category_id = request.GET.get("category", 0)
+    category = None
 
     if category_id:
         items = items.filter(category_id=category_id)
+        category = Category.objects.get(id=category_id)
 
     if query:
         items = items.filter(Q(name__icontains=query) | Q(description__icontains=query))
+
+    if category and query:
+        title = f"{query} in {category.name}"
+
+    elif category:
+        title = str(category.name)
+
+    elif query:
+        title = query
+
+    else:
+        title = "Items"
 
     context = {
         "items": items,
         "query": query,
         "categories": categories,
         "category_id": int(category_id),
+        "category": category,
+        "title": title,
     }
 
     return render(request, "item/items.html", context)

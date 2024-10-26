@@ -9,6 +9,6 @@ class ConversationMessageForm(forms.ModelForm):
         fields = ("content",)
         widgets = {
             "content": forms.Textarea(
-                attrs={"class": "w-full py-4 px-6 rounded-xl border"}
+                attrs={"class": "tw-w-full tw-py-4 tw-px-6 tw-rounded-xl tw-border", "rows": "3", "autofocus": True}
             )
         }
