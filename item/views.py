@@ -23,12 +23,12 @@ def detail(request, item_id):
     if request.method == "POST":
         try:
             exclusive = Pedido.objects.get(item=item, owner=request.user)
-            endpoint_pedido = f"http://127.0.0.1:8000/pedido/{exclusive.id}/"
+            endpoint_pedido = f"https://koa-deals.onrender.com/pedido/{exclusive.id}/"
             delete_request_pedido = requests.delete(endpoint_pedido)
 
         except cart_.models.Pedido.DoesNotExist:
-            endpoint_pedido = "http://127.0.0.1:8000/pedido/"
-            endpoint_cart = "http://127.0.0.1:8000/cart/"
+            endpoint_pedido = "https://koa-deals.onrender.com/pedido/"
+            endpoint_cart = "https://koa-deals.onrender.com/cart/"
 
             pedido = {
                 "item": item.id,

@@ -27,7 +27,8 @@ class CartAPIView(generics.CreateAPIView):
         return render(request, "cart/cart.html", context)
 
     def post(self, request, *args, **kwargs):
-        endpoint = "http://127.0.0.1:8000/pedido/"
+        # endpoint = "http://127.0.0.1:8000/pedido/"
+        endpoint = "https://koa-deals.onrender.com/pedido/"
         if "delete" in request.POST:
             pedido_id = request.POST.get("delete")
             endpoint += pedido_id + "/"
