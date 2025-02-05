@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.conf import settings
+
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Item, Category
 from .forms import NewItemForm, EditItemForm
@@ -21,14 +24,25 @@ def detail(request, item_id):
     )[0:3]
 
     if request.method == "POST":
+
+        if settings.DEBUG:
+            endpoint_default = "http://127.0.0.1:8000/"
+        else:
+            endpoint_default = "http://localhost:8000/"
+
         try:
             exclusive = Pedido.objects.get(item=item, owner=request.user)
-            endpoint_pedido = f"https://koa-deals.onrender.com/pedido/{exclusive.id}/"
+
+            # exclusive = get_object_or_404(Pedido, item=item, owner=request.user)
+            # something = request.POST.get("value1", "value2")
+
+            endpoint_pedido = f"{endpoint_default}pedido/{exclusive.id}/"
+            # endpoint_pedido = f"https://koa-deals.onrender.com/pedido/{exclusive.id}/"
             delete_request_pedido = requests.delete(endpoint_pedido)
 
-        except cart_.models.Pedido.DoesNotExist:
-            endpoint_pedido = "https://koa-deals.onrender.com/pedido/"
-            endpoint_cart = "https://koa-deals.onrender.com/cart/"
+        except Pedido.DoesNotExist:
+            endpoint_pedido = endpoint_default + "pedido/"
+            endpoint_cart = endpoint_default + "cart/"
 
             pedido = {
                 "item": item.id,
@@ -53,8 +67,7 @@ def detail(request, item_id):
             exclusive = Pedido.objects.get(item=item, owner=request.user)
             show = False
 
-        # cart.models.Pedido.DoesNotExist
-        except cart_.models.Pedido.DoesNotExist:
+        except Pedido.DoesNotExist:
             show = True
 
         context = {"item": item, "releted_items": releted_items, "show": show}
