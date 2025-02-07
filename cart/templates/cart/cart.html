@@ -20,14 +20,14 @@
 			<div class="col-3">
 				<form action="" method="POST" class="rounded-pill">
 					{% csrf_token %}
-					<button name="add" value="{{ pedido.id }}" type="submit" class="tw-inline-block tw-pr-3"><i class="bi bi-plus-lg"></i></button>
+					{% if pedido.quantity %}
+						<button name="subtract" value="{{ pedido.id }}" type="submit" class="tw-inline-block tw-pr-3"><i class="bi bi-dash-lg"></i></button>
+					{% endif %}
 
 					<p class="tw-inline-block">{{ pedido.quantity }}</p>
 
-					{% if pedido.quantity %}
-						<button name="subtract" value="{{ pedido.id }}" type="submit" class="tw-inline-block tw-pl-3"><i class="bi bi-dash-lg"></i></button>
-					{% endif %}
-
+					
+						<button name="add" value="{{ pedido.id }}" type="submit" class="tw-inline-block tw-pl-3"><i class="bi bi-plus-lg"></i></button>
 				</form>				
 			</div>
 			<div class="col-2">${{ pedido.get_total_pedido }}</div>	
@@ -61,10 +61,12 @@
 	<div class="row pt-1">
 		<p>${{ total }} - {{ quantities }} items</p>
 	</div>
-	<form action="" method="">
+	<!-- <form action="" method="">
 		{% csrf_token %}
 		<button value="" type="commit" class="tw-inline-block tw-px-6 py-3 tw-text-lg tw-font-semibold tw-bg-cyan-500 text-white tw-rounded-xl hover:tw-bg-cyan-700">Proceed to the checkout</button>
-	</form>
+	</form> -->
+
+	{{ paypal_form.render }}
 </div>
 </section>
 	

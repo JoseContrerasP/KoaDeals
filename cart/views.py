@@ -10,6 +10,13 @@ from item.models import Item as Product
 from .serializers import PedidoSerializer, CartSerializer 
 from .models import Pedido, Cart
 
+# Import PayPal stuff
+from django.urls import reverse
+from paypal.standard.forms import PayPalPaymentsForm
+from django.conf import settings
+import uuid # unique user id for duplicate orders
+
+
 class CartAPIView(generics.CreateAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
@@ -24,18 +31,33 @@ class CartAPIView(generics.CreateAPIView):
             total += pedido.get_total_pedido()
             quantities += pedido.quantity
 
-        context = {"pedidos": pedidos, "total": total, "quantities": quantities}
+        host = request.get_host()
+
+        paypal_dict = {
+            "business": settings.PAYPAL_RECEIVER_EMAIL,
+            "amount": total,
+            "item_name": "Item Name", # later we can make it more precise
+            "no_shipping": "2",
+            "invoice": str(uuid.uuid4()),
+            "currency_code": "USD",
+            "notify_url": f"http://{host}{reverse("paypal-ipn")}",
+            "return_url": f"http://{host}{reverse("core:payment_success")}",
+            "cancel_return": f"http://{host}{reverse("core:payment_failed")}",
+        }
+
+        paypal_form = PayPalPaymentsForm(initial=paypal_dict)
+
+        context = {"pedidos": pedidos, "total": total, "quantities": quantities, "paypal_form": paypal_form}
         return render(request, "cart/cart.html", context)
 
     def post(self, request, *args, **kwargs):
-        
         if settings.DEBUG:
             default_endpoint = "http://localhost:8000/"
         else:
             default_endpoint = "http://127.0.0.1:8000/"
 
         endpoint = default_endpoint + "pedido/"
-        
+
         if "delete" in request.POST:
             pedido_id = request.POST.get("delete")
             endpoint += pedido_id + "/"

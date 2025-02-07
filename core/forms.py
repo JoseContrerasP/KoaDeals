@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 
-from allauth.account.forms import SignupForm
+# from allauth.account.forms import SignupForm
 
 
 class LoginForm(AuthenticationForm):

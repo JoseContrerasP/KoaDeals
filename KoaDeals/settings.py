@@ -1,6 +1,8 @@
 from pathlib import Path
 
 import os
+from dotenv import load_dotenv
+
 import dj_database_url
 
 # Cloudinary imports
@@ -8,6 +10,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -51,6 +54,8 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     # drf
     "rest_framework",
+    # django-paypal
+    "paypal.standard.ipn",
 ]
 
 MIDDLEWARE = [
@@ -200,3 +205,9 @@ SOCIALACCOUNT_PROVIDERS = {
 # cart
 
 CART_SESSION_ID = "cart"
+
+# Paypal settings
+
+PAYPAL_TEST = True
+
+PAYPAL_RECEIVER_EMAIL = os.getenv("PAYPAL_RECEIVER_EMAIL")

@@ -5,6 +5,15 @@ from .forms import MySignupForm, LoginForm
 
 from django.contrib.auth import login, logout, authenticate
 
+from django.conf import settings
+
+import os
+from dotenv import load_dotenv
+from pathlib import Path
+
+dotenv_path = Path('C:\\Users\\18298\\Desktop\\Jose\\programming\\koadeals2\\.env')
+load_dotenv(dotenv_path=dotenv_path)
+# print(dotenv_path.exists())
 
 def index(request):
     items = Item.objects.filter(sold=False).reverse()
@@ -21,8 +30,8 @@ def contact(request):
 def quick_login(request):
     user = authenticate(
         request,
-        username="",
-        password="",
+        username=os.getenv("USUARIO"),
+        password=os.getenv("PASSWORD"),
     )
 
     login(request, user)
@@ -83,3 +92,11 @@ def signin(request):
 def signout(request):
     logout(request)
     return redirect("core:index")
+
+
+def payment_success(request):
+    return render(request, "core/payment_success.html", {})
+
+
+def payment_failed(request):
+    return render(request, "core/payment_failed.html", {})
