@@ -5,42 +5,43 @@ from item.models import Item
 from .models import Conversation
 from .forms import ConversationMessageForm
 
+import communication
+
 
 @login_required
 def new_conversation(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
 
-    if item.created_by == request.user:
-        return redirect("dashboard:index")
+    try:
+        conversation = Conversation.objects.get(item=item, members__in=[request.user.id])
 
-    conversations = Conversation.objects.filter(item=item).filter(
-        members__in=[request.user.id]
-    )
+        if conversation:
+            return redirect("conversation:detail", conversation_id=conversation.id)
+        
+    except communication.models.Conversation.DoesNotExist:
 
-    if conversations:
-        pass
+        if request.method == "POST":
+            form = ConversationMessageForm(request.POST)
 
-    if request.method == "POST":
-        form = ConversationMessageForm(request.POST)
+            if form.is_valid():
+                conversation = Conversation.objects.create(item=item)
+                conversation.members.add(request.user)
+                conversation.members.add(item.created_by)
+                conversation.save()
 
-        if form.is_valid():
-            conversation = Conversation.objects.create(item=item)
-            conversation.members.add(request.user)
-            conversation.members.add(item.created_by)
-            conversation.save()
+                conversation_message = form.save(commit=False)
+                conversation_message.conversation = conversation
+                conversation_message.created_by = request.user
+                conversation_message.save()
 
-            conversation_message = form.save(commit=False)
-            conversation_message.conversation = conversation
-            conversation_message.created_by = request.user
-            conversation_message.save()
+                return redirect("conversation:detail", conversation_id=conversation.id)
 
-            return redirect("item:detail", item_id=item_id)
-    else:
-        form = ConversationMessageForm()
+        else:
+            form = ConversationMessageForm()
 
-    context = {"form": form}
+        context = {"form": form}
 
-    return render(request, "conversation/new.html", context)
+        return render(request, "conversation/new.html", context)
 
 
 @login_required
@@ -75,5 +76,5 @@ def detail(request, conversation_id):
         form = ConversationMessageForm()
 
     context = {"conversation": conversation, "form": form}
-
+    
     return render(request, "conversation/detail.html", context)

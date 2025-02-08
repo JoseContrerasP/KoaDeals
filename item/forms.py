@@ -3,7 +3,7 @@ from django import forms
 from .models import Item
 
 
-INPUT_CLASSES = "w-full py-4 px-6 rounded-xl border"
+INPUT_CLASSES = "tw-w-full tw-py-4 tw-px-6 tw-rounded-xl tw-border"
 
 
 class NewItemForm(forms.ModelForm):
@@ -19,7 +19,7 @@ class NewItemForm(forms.ModelForm):
 
         widgets = {
             "name": forms.TextInput(attrs={"class": INPUT_CLASSES}),
-            "description": forms.Textarea(attrs={"class": INPUT_CLASSES}),
+            "description": forms.Textarea(attrs={"class": INPUT_CLASSES, "rows": "3"}),
             "price": forms.NumberInput(attrs={"class": INPUT_CLASSES}),
             "image": forms.FileInput(attrs={"class": INPUT_CLASSES}),
             "category": forms.Select(attrs={"class": INPUT_CLASSES}),
@@ -33,7 +33,7 @@ class EditItemForm(forms.ModelForm):
 
         widgets = {
             "name": forms.TextInput(attrs={"class": INPUT_CLASSES}),
-            "description": forms.Textarea(attrs={"class": INPUT_CLASSES}),
+            "description": forms.Textarea(attrs={"class": INPUT_CLASSES, "rows": "3"}),
             "price": forms.NumberInput(attrs={"class": INPUT_CLASSES}),
             "image": forms.FileInput(attrs={"class": INPUT_CLASSES}),
             "category": forms.Select(attrs={"class": INPUT_CLASSES}),

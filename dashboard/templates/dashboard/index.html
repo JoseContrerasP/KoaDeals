@@ -3,29 +3,30 @@
 {% block title %}Dashboard{% endblock title %}
 
 {% block content %}
-<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
-    <h2 class="mb-12 text-2xl text-center">My items</h2>
-    <div class="grid grid-cols-3 gap-3">
-        {% for item in items %}
-            <div>
-                <a href="{% url 'item:detail' item_id=item.id %}">
-                    <div>
-                        <img src="{{ item.image.url }}" class="rounded-t-xl">                        
+<section class="full-screen">
+    <div class="tw-mt-6 tw-px-6 tw-py-12 tw-bg-gray-100 tw-rounded-xl">
+        <h2 class="tw-mb-12 tw-text-2xl tw-text-center">My Items</h2>
+        <div class="row" data-masonry='{"percentPosition": true }'>
+            {% for item in items %}
+                <div class="col-12 col-md-6 col-lg-3 mb-4">
+                    <div class="card-custom tw-rounded-t-xl">
+                        <a href="{% url 'item:detail' item_id=item.id %}">
+                            <div class="card-custom-image tw-rounded-t-xl">
+                                <img src="{{ item.image.url }}" class="tw-rounded-t-xl">
+                            </div>
+
+                            <div class="tw-p-6 tw-bg-white tw-rounded-b-xl">
+                                <h2 class="tw-text-2xl">{{ item.name }}</h2>
+                                <p class="tw-text-gray-500">Price: {{ item.price }}</p>
+                            </div>
+                        </a>
                     </div>
+                </div>
 
-                    <div class="p-6 bg-white rounded-b-xl">
-                        <h2 class="text-2xl">{{ item.name }}</h2>
-                        <p class="text-gray-500">Price: {{ item.price }}</p>
-                        <p class="text-gray-500">Seller: {{ item.created_by }}</p>
-                        
-                    </div>
-
-                </a>
-            </div>
-
-        {% empty %}
-                <p>Wua, chaval</p>
-        {% endfor %}
+            {% empty %}
+            <p class="text-center">You haven't created any items yet. To create a new item go to <a href="{% url 'item:new' %}" class="tw-font-semibold">New Item</a></p> 
+            {% endfor %}
+        </div>
     </div>
-</div>
+</section>
 {% endblock content %}

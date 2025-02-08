@@ -12,6 +12,7 @@ urlpatterns = [
     path("inbox/", include("communication.urls")),
     path("accounts/", include("allauth.urls")),
     path("", include("cart.urls")),
+    path("paypal", include("paypal.standard.ipn.urls")),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

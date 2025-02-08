@@ -1,5 +1,6 @@
 import requests
 from django.shortcuts import render, redirect
+from django.conf import settings
 
 from rest_framework.views import APIView
 from rest_framework import status, generics, permissions
@@ -8,6 +9,13 @@ from item.models import Item as Product
 
 from .serializers import PedidoSerializer, CartSerializer 
 from .models import Pedido, Cart
+
+# Import PayPal stuff
+from django.urls import reverse
+from paypal.standard.forms import PayPalPaymentsForm
+from django.conf import settings
+import uuid # unique user id for duplicate orders
+
 
 class CartAPIView(generics.CreateAPIView):
     queryset = Cart.objects.all()
@@ -23,11 +31,33 @@ class CartAPIView(generics.CreateAPIView):
             total += pedido.get_total_pedido()
             quantities += pedido.quantity
 
-        context = {"pedidos": pedidos, "total": total, "quantities": quantities}
-        return render(request, "cart/index.html", context)
+        host = request.get_host()
+
+        paypal_dict = {
+            "business": settings.PAYPAL_RECEIVER_EMAIL,
+            "amount": total,
+            "item_name": "Item Name", # later we can make it more precise
+            "no_shipping": "2",
+            "invoice": str(uuid.uuid4()),
+            "currency_code": "USD",
+            "notify_url": f"http://{host}{reverse("paypal-ipn")}",
+            "return_url": f"http://{host}{reverse("core:payment_success")}",
+            "cancel_return": f"http://{host}{reverse("core:payment_failed")}",
+        }
+
+        paypal_form = PayPalPaymentsForm(initial=paypal_dict)
+
+        context = {"pedidos": pedidos, "total": total, "quantities": quantities, "paypal_form": paypal_form}
+        return render(request, "cart/cart.html", context)
 
     def post(self, request, *args, **kwargs):
-        endpoint = "http://127.0.0.1:8000/pedido/"
+        if settings.DEBUG:
+            default_endpoint = "http://localhost:8000/"
+        else:
+            default_endpoint = "http://127.0.0.1:8000/"
+
+        endpoint = default_endpoint + "pedido/"
+
         if "delete" in request.POST:
             pedido_id = request.POST.get("delete")
             endpoint += pedido_id + "/"
@@ -57,13 +87,7 @@ class CartAPIView(generics.CreateAPIView):
             return redirect("cart:cart")
 
         else:
-            print(request)
             return self.create(request, *args, **kwargs)
-
-    # def post(self, request, *args, **kwargs):
-    #     print(request.POST)
-    #     print("action" in request.POST)
-    #     return render(request, "core/contact.html")
 
 class PedidoAPIView(generics.ListCreateAPIView):
     queryset = Pedido.objects.all()
@@ -81,65 +105,3 @@ class CartRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     # permission_classes = [permissions.IsAuthenticated]
 
 
-# from .service import Cart
-
-# class ProductAPI_false(APIView):
-#     """
-#     Single API to handle product operations
-#     """
-#     serializer_class = ProductSerializer
-
-#     def get(self, request, format=None):
-#         qs = Product.objects.all()
-
-#         return Response(
-#             {"data": self.serializer_class(qs, many=True).data}, 
-#             status=status.HTTP_200_OK
-#             )
-
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.serializer_class(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-
-#         return Response(
-#             serializer.data, 
-#             status=status.HTTP_201_CREATED
-#             )
-
-# class CartAPI_false(APIView):
-#     """
-#     Single API to handle cart operations
-#     """
-#     def get(self, request, format=None):
-#         cart = Cart(request)
-
-#         return Response(
-#             {"data": list(cart.__iter__()), 
-#             "cart_total_price": cart.get_total_price()},
-#             status=status.HTTP_200_OK
-#             )
-
-#     def post(self, request, **kwargs):
-#         cart = Cart(request)
-
-#         if "remove" in request.data:
-#             product = request.data["product"]
-#             cart.remove(product)
-
-#         elif "clear" in request.data:
-#             cart.clear()
-
-#         else:
-#             product = request.data
-#             cart.add(
-#                     product=product["product"],
-#                     quantity=product["quantity"],
-#                     overide_quantity=product["overide_quantity"] if "overide_quantity" in product else False
-#                 )
-#             print(request.data)
-
-#         return Response(
-#             {"message": "cart updated"},
-#             status=status.HTTP_202_ACCEPTED
-#         )

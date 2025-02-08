@@ -1,6 +1,8 @@
 from pathlib import Path
 
 import os
+from dotenv import load_dotenv
+
 import dj_database_url
 
 # Cloudinary imports
@@ -8,12 +10,14 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get("SECRET_KEY", default="your secret key")
 
-DEBUG = "RENDER" not in os.environ
+# DEBUG = "RENDER" not in os.environ
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -50,17 +54,19 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.google",
     # drf
     "rest_framework",
+    # django-paypal
+    "paypal.standard.ipn",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
     "allauth.account.middleware.AccountMiddleware",
 ]
 
@@ -137,10 +143,10 @@ LOGOUT_REDIRECT_URL = "/"
 
 STATIC_URL = "/static/"
 
-if not DEBUG:
-    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# if not DEBUG:
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 STATICFILES_DIRS = [
     os.path.join(
@@ -199,3 +205,9 @@ SOCIALACCOUNT_PROVIDERS = {
 # cart
 
 CART_SESSION_ID = "cart"
+
+# Paypal settings
+
+PAYPAL_TEST = True
+
+PAYPAL_RECEIVER_EMAIL = os.getenv("PAYPAL_RECEIVER_EMAIL")
