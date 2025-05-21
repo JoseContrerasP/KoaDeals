@@ -143,5 +143,8 @@ button {
   margin-top: 4rem !important;
 }
 
-/* form */
+/* Payment_failed */
 
+#payment_failed {
+  min-height: 46vh;
+}

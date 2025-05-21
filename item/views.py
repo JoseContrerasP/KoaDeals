@@ -19,16 +19,16 @@ import cart as cart_
 
 def detail(request, item_id):
     item = get_object_or_404(Item, pk=item_id)
+
     releted_items = Item.objects.filter(category=item.category, sold=False).exclude(
         pk=item_id
     )[0:3]
 
     if request.method == "POST":
-
         if settings.DEBUG:
-            endpoint_default = "http://127.0.0.1:8000/"
+            endpoint_default = settings.LOCAL_ENDPOINT
         else:
-            endpoint_default = "http://localhost:8000/"
+            endpoint_default = settings.deploy_endpoint
 
         try:
             exclusive = Pedido.objects.get(item=item, owner=request.user)
@@ -47,7 +47,7 @@ def detail(request, item_id):
             pedido = {
                 "item": item.id,
                 "owner": request.user.id,
-                "quantity": 4,
+                "quantity": 1,
             }
 
             post_request_pedido = requests.post(endpoint_pedido, json=pedido)
@@ -64,8 +64,12 @@ def detail(request, item_id):
 
     else:
         try:
-            exclusive = Pedido.objects.get(item=item, owner=request.user)
-            show = False
+            if request.user.is_authenticated:
+                exclusive = Pedido.objects.get(item=item, owner=request.user)
+                show = False
+
+            else:
+                return redirect("core:login")
 
         except Pedido.DoesNotExist:
             show = True

@@ -14,32 +14,39 @@
 	</div>
 	<hr>
 	{% for pedido in pedidos %}
-		<div class="row pt-1">
+		<div class="row pt-1 align-items-center">
 			<div class="col-3"><a href="{% url 'item:detail' pedido.item.id %}" target="_blank">{{ pedido.item.name }}</a></div>
 			<div class="col-3">${{ pedido.item.price }}</div>
 			<div class="col-3">
-				<form action="" method="POST" class="rounded-pill">
-					{% csrf_token %}
-					{% if pedido.quantity %}
-						<button name="subtract" value="{{ pedido.id }}" type="submit" class="tw-inline-block tw-pr-3"><i class="bi bi-dash-lg"></i></button>
-					{% endif %}
+				<form action="" method="POST">
+					<div class="d-flex">
+						<div class="d-flex col-6 justify-content-between align-items-start">
+							{% csrf_token %}
+							{% if pedido.quantity > 1 %}
+								<button name="subtract" value="{{ pedido.id }}" type="submit" class="tw-inline-block tw-pr-3"><i class="bi bi-dash-lg"></i></button>
+							{% else %}
+								
+								<button name="delete" value="{{ pedido.id }}" type="commit" class="tw-inline-block">
+									<i class="bi bi-trash3 delete-button-custom"></i>
+									<i class="bi bi-trash3-fill delete-button-custom2"></i>
+								</button>
+							{% endif %}
 
-					<p class="tw-inline-block">{{ pedido.quantity }}</p>
-
-					
-						<button name="add" value="{{ pedido.id }}" type="submit" class="tw-inline-block tw-pl-3"><i class="bi bi-plus-lg"></i></button>
+							<p class="tw-inline-block">{{ pedido.quantity }}</p>
+							
+							<button name="add" value="{{ pedido.id }}" type="submit" class="tw-inline-block tw-pl-3"><i class="bi bi-plus-lg"></i></button>
+						</div>
+					</div>
 				</form>				
 			</div>
 			<div class="col-2">${{ pedido.get_total_pedido }}</div>	
 			<div class="col">
 				<form action="" method="POST">
 					{% csrf_token %}
-					<div id="digo">
-						<button name="delete" value="{{ pedido.id }}" type="commit" class="tw-inline-block">
-							<i class="bi bi-x-circle delete-button-custom"></i>
-							<i class="bi bi-x-circle-fill delete-button-custom2"></i>
-						</button>
-					</div>
+					<button name="delete" value="{{ pedido.id }}" type="commit" class="tw-inline-block">
+						<i class="bi bi-x-circle delete-button-custom"></i>
+						<i class="bi bi-x-circle-fill delete-button-custom2"></i>
+					</button>
 				</form>	
 			</div>
 		</div>	
@@ -53,6 +60,7 @@
 	{% endfor %}
 
 </div>
+
 <br>
 <div class="container p-4 tw-rounded-xl tw-bg-gray-50 box-shadow-custom">
 	<h4 class="tw-text-lg tw-font-semibold pb-2">Summary</h4>
@@ -61,13 +69,57 @@
 	<div class="row pt-1">
 		<p>${{ total }} - {{ quantities }} items</p>
 	</div>
-	<!-- <form action="" method="">
-		{% csrf_token %}
-		<button value="" type="commit" class="tw-inline-block tw-px-6 py-3 tw-text-lg tw-font-semibold tw-bg-cyan-500 text-white tw-rounded-xl hover:tw-bg-cyan-700">Proceed to the checkout</button>
-	</form> -->
 
-	{{ paypal_form.render }}
+{% if pedidos %}
+	<div class="row">
+		<div class="col-md-3">
+			{{ paypal_form.render }}
+		</div>
+
+		<div class="col-md-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+			<!-- Button trigger modal -->
+			<button id="tooltipBtn" type="button" class="px-4 py-3 mx-2 tw-text-lg tw-font-semibold tw-bg-red-500 text-white rounded-pill hover:tw-bg-red-700" data-bs-placement="right" title="Click here before to continue with the purchase process!" data-bs-toggle="tooltip">
+			  Credentials For Paypal Account
+			</button>
+		</div>
+	</div>
+{% endif %}
 </div>
 </section>
-	
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Credentials For Paypal Account</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+            To simulate a "natural" process of payment, I provide the credentials for a personal PayPal sandbox account. No real payment will be made, so don't worry about the prices 😉
+        </p>
+
+        <br>
+
+        <div class="copy-link row my-3">
+            <b class="d-block col-3">Email: </b><input type="text" class="copy-link-input col-6" value="test.personal@email.com" readonly> 
+
+            <button type="button" class="copy-link-button col-3">
+              <i class="bi bi-copy"></i>
+            </button>
+        </div>
+
+        <div class="copy-link row my-3">
+            <b class="d-block col-3">Password: </b><input type="text" class="copy-link-input col-6" value="drowssap123!" readonly> 
+
+            <button type="button" class="copy-link-button col-3">
+              <i class="bi bi-copy"></i>
+            </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}

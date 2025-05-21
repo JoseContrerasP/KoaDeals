@@ -1,6 +1,5 @@
 import requests
 from django.shortcuts import render, redirect
-from django.conf import settings
 
 from rest_framework.views import APIView
 from rest_framework import status, generics, permissions
@@ -33,17 +32,31 @@ class CartAPIView(generics.CreateAPIView):
 
         host = request.get_host()
 
-        paypal_dict = {
-            "business": settings.PAYPAL_RECEIVER_EMAIL,
-            "amount": total,
-            "item_name": "Item Name", # later we can make it more precise
-            "no_shipping": "2",
-            "invoice": str(uuid.uuid4()),
-            "currency_code": "USD",
-            "notify_url": f"http://{host}{reverse("paypal-ipn")}",
-            "return_url": f"http://{host}{reverse("core:payment_success")}",
-            "cancel_return": f"http://{host}{reverse("core:payment_failed")}",
-        }
+        if settings.DEBUG:
+            paypal_dict = {
+                "business": settings.PAYPAL_RECEIVER_EMAIL,
+                "amount": total,
+                "item_name": "Item Name", # later we can make it more precise
+                "no_shipping": "2",
+                "invoice": str(uuid.uuid4()),
+                "currency_code": "USD",
+                "notify_url": f"http://{host}{reverse("paypal-ipn")}",
+                "return_url": f"http://{host}{reverse("core:payment_success")}",
+                "cancel_return": f"http://{host}{reverse("core:payment_failed")}",
+            }
+
+        else:
+            paypal_dict = {
+                "business": settings.PAYPAL_RECEIVER_EMAIL,
+                "amount": total,
+                "item_name": "Item Name", # later we can make it more precise
+                "no_shipping": "2",
+                "invoice": str(uuid.uuid4()),
+                "currency_code": "USD",
+                "notify_url": f"https://{host}{reverse("paypal-ipn")}",
+                "return_url": f"https://{host}{reverse("core:payment_success")}",
+                "cancel_return": f"https://{host}{reverse("core:payment_failed")}",
+            }
 
         paypal_form = PayPalPaymentsForm(initial=paypal_dict)
 
@@ -52,9 +65,9 @@ class CartAPIView(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         if settings.DEBUG:
-            default_endpoint = "http://localhost:8000/"
+            default_endpoint = settings.LOCAL_ENDPOINT
         else:
-            default_endpoint = "http://127.0.0.1:8000/"
+            default_endpoint = settings.DEPLOY_ENDPOINT
 
         endpoint = default_endpoint + "pedido/"
 
@@ -62,8 +75,7 @@ class CartAPIView(generics.CreateAPIView):
             pedido_id = request.POST.get("delete")
             endpoint += pedido_id + "/"
             request_delete = requests.delete(endpoint)
-            return redirect("cart:cart")
-
+            
         elif "add" in request.POST:
             pedido_id = request.POST.get("add")
             endpoint += pedido_id + "/"
@@ -73,7 +85,6 @@ class CartAPIView(generics.CreateAPIView):
                 "quantity": new_quantity
             }
             request_patch = requests.patch(endpoint, json=data)
-            return redirect("cart:cart")
 
         elif "subtract" in request.POST:
             pedido_id = request.POST.get("subtract")
@@ -84,10 +95,11 @@ class CartAPIView(generics.CreateAPIView):
                 "quantity": new_quantity
             }
             request_patch = requests.patch(endpoint, json=data)
-            return redirect("cart:cart")
 
         else:
             return self.create(request, *args, **kwargs)
+
+        return redirect("cart:cart")
 
 class PedidoAPIView(generics.ListCreateAPIView):
     queryset = Pedido.objects.all()

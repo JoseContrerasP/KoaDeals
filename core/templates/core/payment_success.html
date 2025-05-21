@@ -1,6 +1,47 @@
 {% extends 'base.html' %}
-{% block title %}Cart{% endblock title %}
+{% block title %}Payment Success{% endblock title %}
 
 {% block content %}
-Llorar
+
+	<h3 class="tw-tw-text-lg tw-tw-font-semibold">Payment Completed Successfully</h3>
+	
+	<p><b>Thank you very much</b> for your purchase! Here's a final detailed look at your purchased items.</p>
+	<div class="container p-4 tw-rounded-xl tw-bg-gray-50 box-shadow-custom">
+	<div class="row pb-2">
+		<div class="col-3 tw-text-lg tw-font-semibold">Product</div>
+		<div class="col-3 tw-text-lg tw-font-semibold">Price</div>
+		<div class="col-3 tw-text-lg tw-font-semibold">Quantity</div>
+		<div class="col-3 tw-text-lg tw-font-semibold">Total</div>
+	</div>
+	<hr>
+	{% for pedido in pedidos %}
+		<div class="row pt-1 align-items-center">
+			<div class="col-3"><a href="{% url 'item:detail' pedido.item.id %}" target="_blank">{{ pedido.item.name }}</a></div>
+			<div class="col-3">${{ pedido.item.price }}</div>
+			<div class="col-3">
+				<p class="tw-inline-block">{{ pedido.quantity }}</p>
+			</div>
+			<div class="col-2">${{ pedido.get_total_pedido }}</div>	
+		</div>	
+	{% empty %}
+		<div class="row pt-2">
+			<div class="col tw-text-lg tw-font-semibold">-</div>
+			<div class="col tw-text-lg tw-font-semibold">-</div>
+			<div class="col tw-text-lg tw-font-semibold">-</div>
+			<div class="col tw-text-lg tw-font-semibold">-</div>
+		</div>
+	{% endfor %}
+
+</div>
+
+<br>
+
+<div class="container p-4 tw-rounded-xl tw-bg-gray-50 box-shadow-custom">
+	<h4 class="tw-text-lg tw-font-semibold pb-2">Summary</h4>
+	<hr>
+	<div class="row pt-1">
+		<p>${{ total }} - {{ quantities }} items</p>
+	</div>
+</div>
+
 {% endblock content %}

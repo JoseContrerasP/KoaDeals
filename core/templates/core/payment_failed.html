@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
-{% block title %}Cart{% endblock title %}
+{% block title %}Payment Failed{% endblock title %}
 
 {% block content %}
-Los panchos
+
+<section id="payment_failed">
+	<h3 class="tw-tw-text-lg tw-font-semibold">The Payment Failed</h3>
+	
+	<p>Sorry but something went wrong with the payment.</p>
+
+	<p>Please try again in the <a class="nav-link tw-text-lg tw-font-semibold d-inline-block" href="{% url 'cart:cart' %}">Cart</a> or continue shopping at <a class="navbar-brand tw-text-lg tw-font-semibold" href="/">KoaDeals</a>
+
+	</p>
+</section>
 {% endblock content %}
