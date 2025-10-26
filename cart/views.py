@@ -40,9 +40,9 @@ class CartAPIView(generics.CreateAPIView):
                 "no_shipping": "2",
                 "invoice": str(uuid.uuid4()),
                 "currency_code": "USD",
-                "notify_url": f"http://{host}{reverse("paypal-ipn")}",
-                "return_url": f"http://{host}{reverse("core:payment_success")}",
-                "cancel_return": f"http://{host}{reverse("core:payment_failed")}",
+                "notify_url": f"http://{host}{reverse('paypal-ipn')}",
+                "return_url": f"http://{host}{reverse('core:payment_success')}",
+                "cancel_return": f"http://{host}{reverse('core:payment_failed')}",
             }
 
         else:
@@ -53,9 +53,9 @@ class CartAPIView(generics.CreateAPIView):
                 "no_shipping": "2",
                 "invoice": str(uuid.uuid4()),
                 "currency_code": "USD",
-                "notify_url": f"https://{host}{reverse("paypal-ipn")}",
-                "return_url": f"https://{host}{reverse("core:payment_success")}",
-                "cancel_return": f"https://{host}{reverse("core:payment_failed")}",
+                "notify_url": f"https://{host}{reverse('paypal-ipn')}",
+                "return_url": f"https://{host}{reverse('core:payment_success')}",
+                "cancel_return": f"https://{host}{reverse('core:payment_failed')}",
             }
 
         paypal_form = PayPalPaymentsForm(initial=paypal_dict)

@@ -18,7 +18,10 @@ from pathlib import Path
 
 from cart.models import Pedido, Cart
 
-dotenv_path = Path('C:\\Users\\18298\\Desktop\\Jose\\programming\\koadeals2\\.env')
+if settings.DEBUG:
+    dotenv_path = Path('C:\\Users\\18298\\Desktop\\Jose\\programming\\koadeals2\\.env')
+else:
+    dotenv_path = Path('home/koadeals/koadeals/')
 load_dotenv(dotenv_path=dotenv_path)
 
 def index(request):
@@ -50,7 +53,7 @@ def quick_login(request, guest=True):
             password=request.POST.get('password1'),
         )
 
-    login(request, user)
+    login(request, user, backend="django.contrib.auth.backends.ModelBackend")
     return redirect("core:index")
 
 
@@ -103,7 +106,7 @@ def signin(request):
                 )
 
                 if user:
-                    login(request, user)
+                    login(request, user, backend="django.contrib.auth.backends.ModelBackend")
                     return redirect("core:index")
 
                 else:
